@@ -1,719 +1,450 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peter Bachorík</title>
-  <meta name="description" content="Peter Bachorík — computer science student. Formal languages, algorithms, machine learning." />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      --bg: #FBFBF8;
-      --surface: #FFFFFF;
-      --ink: #15201A;
-      --text-body: #324038;
-      --muted: #5C6B62;
-      --accent: #0E7C46;
-      --accent-deep: #0A5A33;
-      --accent-soft: #E7F4EC;
-      --line: #E8E9E2;
-      --header-bg: rgba(251, 251, 248, 0.82);
-      --nav-h: 68px;
-      --max: 1080px;
-      --r: 14px;
-    }
-
-    :root[data-theme="dark"] {
-      --bg: #0E2519;
-      --surface: #143C28;
-      --ink: #EAF1EC;
-      --text-body: #C6D6CC;
-      --muted: #94AC9C;
-      --accent: #4ED28A;
-      --accent-deep: #66E0A0;
-      --accent-soft: #1D4A33;
-      --line: #3C6E52;
-      --header-bg: rgba(14, 37, 25, 0.82);
-    }
-
-    :root[data-theme="dark"] body {
-      background:
-        radial-gradient(1100px 620px at 50% -12%, rgba(78, 210, 138, 0.13), transparent 68%),
-        var(--bg);
-      background-attachment: fixed;
-    }
-
-    body, header, .btn, .skill-card, .project, .tag {
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .wrap {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 28px;
-    }
-
-    a { color: inherit; }
-
-    /* ---------- Scroll progress ---------- */
-    #progress {
-      position: fixed;
-      top: 0; left: 0;
-      height: 3px;
-      width: 0%;
-      background: var(--accent);
-      z-index: 1000;
-      transition: width 0.05s linear;
-    }
-
-    /* ---------- Nav ---------- */
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: var(--header-bg);
-      backdrop-filter: saturate(180%) blur(12px);
-      -webkit-backdrop-filter: saturate(180%) blur(12px);
-      border-bottom: 1px solid var(--line);
-      z-index: 900;
-    }
-    .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 28px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand {
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      letter-spacing: -0.01em;
-      text-decoration: none;
-    }
-    .brand span { color: var(--accent); }
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-      margin: 0; padding: 0;
-    }
-    .nav-links a {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      text-decoration: none;
-      color: var(--muted);
-      padding: 6px 0;
-      position: relative;
-      transition: color 0.2s ease;
-    }
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0; bottom: 0;
-      height: 2px; width: 0;
-      background: var(--accent);
-      transition: width 0.25s ease;
-    }
-    .nav-links a:hover { color: var(--ink); }
-    .nav-links a.active { color: var(--accent); }
-    .nav-links a.active::after { width: 100%; }
-
-    .theme-btn {
-      position: fixed;
-      bottom: 22px; right: 22px;
-      z-index: 950;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 50%;
-      width: 50px; height: 50px;
-      cursor: pointer;
-      color: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
-      transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
-    }
-    .theme-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .theme-btn svg { width: 20px; height: 20px; }
-    :root[data-theme="dark"] .theme-btn .icon-moon { display: none; }
-    :root:not([data-theme="dark"]) .theme-btn .icon-sun { display: none; }
-
-    .nav-right { display: flex; align-items: center; gap: 14px; }
-
-    .menu-btn {
-      display: none;
-      background: none;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      width: 40px; height: 40px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: var(--ink);
-    }
-
-    /* ---------- Sections ---------- */
-    section {
-      padding: 96px 0;
-      scroll-margin-top: var(--nav-h);
-    }
-    .eyebrow {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.82rem;
-      color: var(--accent);
-      margin-bottom: 14px;
-      letter-spacing: 0.01em;
-    }
-    h2.title {
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 600;
-      font-size: clamp(1.7rem, 3.4vw, 2.4rem);
-      letter-spacing: -0.02em;
-      margin: 0 0 32px;
-    }
-
-    /* ---------- Hero ---------- */
-    #intro {
-      padding-top: calc(var(--nav-h) + 72px);
-      padding-bottom: 80px;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 56px;
-      align-items: center;
-    }
-    .hero h1 {
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.6rem, 6vw, 4.4rem);
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-      margin: 0 0 18px;
-    }
-    .hero .lead {
-      font-size: 1.18rem;
-      color: var(--muted);
-      max-width: 36ch;
-      margin: 0 0 14px;
-    }
-    .hero .sub {
-      color: var(--muted);
-      max-width: 42ch;
-      margin: 0 0 30px;
-    }
-
-    .contacts { display: flex; flex-wrap: wrap; gap: 12px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.85rem;
-      text-decoration: none;
-      padding: 11px 18px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
-    }
-    .btn:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .btn.primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-    .btn.primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
-
-    /* photo */
-    .photo-wrap { display: flex; justify-content: center; }
-    .photo {
-      width: 100%;
-      max-width: 300px;
-      aspect-ratio: 1 / 1.12;
-      border-radius: 22px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 1px 0 var(--line);
-      background: var(--accent-soft);
-      outline: 6px solid var(--accent-soft);
-      outline-offset: -6px;
-    }
-    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .photo .fallback {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 700;
-      font-size: 4.5rem;
-      color: var(--accent);
-      letter-spacing: -0.03em;
-    }
-
-    /* ---------- About ---------- */
-    .about-text { max-width: 64ch; font-size: 1.08rem; color: var(--text-body); }
-    .about-text p { margin: 0 0 18px; }
-
-    /* ---------- Skills ---------- */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-    .skill-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 24px;
-    }
-    .skill-card h3 {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin: 0 0 16px;
-      display: flex; align-items: center; gap: 9px;
-    }
-    .skill-card h3::before {
-      content: "";
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .tags { display: flex; flex-wrap: wrap; gap: 9px; }
-    .tag {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.78rem;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-    }
-
-    /* ---------- Projects ---------- */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .project {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-    .project:hover { border-color: var(--accent); transform: translateY(-3px); }
-    .project h3 {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0 0 10px;
-    }
-    .project p { color: var(--muted); margin: 0 0 18px; flex: 1; font-size: 0.98rem; }
-    .project .tags { margin-bottom: 18px; }
-    .project .links { display: flex; gap: 18px; }
-    .project .links a {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.82rem;
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .project .links a:hover { text-decoration: underline; }
-
-    /* ---------- Education ---------- */
-    .timeline { border-left: 2px solid var(--line); margin-left: 6px; }
-    .edu {
-      position: relative;
-      padding: 0 0 36px 32px;
-    }
-    .edu:last-child { padding-bottom: 0; }
-    .edu::before {
-      content: "";
-      position: absolute;
-      left: -8px; top: 4px;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 3px solid var(--accent);
-    }
-    .edu .when {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .edu h3 {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin: 0 0 4px;
-    }
-    .edu .org { color: var(--muted); margin: 0 0 8px; }
-    .edu .note { color: var(--muted); font-size: 0.95rem; margin: 0; max-width: 60ch; }
-
-    /* ---------- Contact ---------- */
-    #contact { text-align: center; }
-    #contact .title { margin-bottom: 16px; }
-    #contact .lead {
-      color: var(--muted);
-      font-size: 1.1rem;
-      max-width: 46ch;
-      margin: 0 auto 30px;
-    }
-    #contact .contacts { justify-content: center; }
-
-    /* ---------- Footer ---------- */
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 32px 0;
-      text-align: center;
-      color: var(--muted);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8rem;
-    }
-
-    /* ---------- Reveal animation ---------- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.in { opacity: 1; transform: none; }
-
-    /* ---------- Focus ---------- */
-    a:focus-visible, button:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-      border-radius: 4px;
-    }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 760px) {
-      .nav-links {
-        position: absolute;
-        top: var(--nav-h); left: 0; right: 0;
-        flex-direction: column;
-        gap: 0;
-        background: var(--surface);
-        border-bottom: 1px solid var(--line);
-        padding: 8px 28px 16px;
-        display: none;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 12px 0; }
-      .menu-btn { display: flex; align-items: center; justify-content: center; }
-
-      .hero {
-        grid-template-columns: 1fr;
-        gap: 36px;
-        text-align: center;
-      }
-      .hero .lead, .hero .sub { max-width: none; }
-      .contacts { justify-content: center; }
-      .photo-wrap { order: -1; }
-      .photo { max-width: 220px; }
-      section { padding: 72px 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .reveal { transition: none; opacity: 1; transform: none; }
-      .btn:hover, .project:hover { transform: none; }
-    }
-  </style>
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem("theme");
-        var dark = saved ? saved === "dark"
-          : window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (dark) document.documentElement.setAttribute("data-theme", "dark");
-      } catch (e) {}
-    })();
-  </script>
-</head>
-<body>
-  <div id="progress"></div>
-
-  <header>
-    <div class="nav-inner">
-      <a href="#intro" class="brand">peter<span>.</span>bachorik</a>
-      <div class="nav-right">
-        <ul class="nav-links">
-          <li><a href="#intro">// intro</a></li>
-          <li><a href="#about">// about</a></li>
-          <li><a href="#skills">// skills</a></li>
-          <li><a href="#projects">// projects</a></li>
-          <li><a href="#education">// education</a></li>
-          <li><a href="#contact">// contact</a></li>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Lukáš Morvay - IT Developer & Business Information Technology Student</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/favicon.png">
+    <meta name="description" content="Portfolio of Lukáš Morvay - IT Developer specializing in web development, automation, and business information technology.">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-container">
+        <a href="#" class="logo">LM</a>
+        <ul class="nav-menu">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
-        <button class="menu-btn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
-    </div>
-  </header>
+    </nav>
 
-  <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-  </button>
+    <!-- Theme Toggle Button  -->
+    <button class="theme-toggle" aria-label="Toggle theme">
+    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    </button>
 
-  <main>
-    <!-- INTRO -->
-    <section id="intro">
-      <div class="wrap">
-        <div class="hero">
-          <div class="reveal">
-            <p class="eyebrow">// computer science student</p>
-            <h1>Peter Bachorík</h1>
-            <p class="lead">I build software with a focus on what happens under the hood — from formal languages and automata to algorithms and machine learning.</p>
-            <p class="sub">I like problems where you first have to understand the "why" before you write the "how".</p>
-            <div class="contacts">
-              <!-- TODO: add your email -->
-              <a class="btn primary" href="mailto:your@email.com">&#9993; Get in touch</a>
-              <a class="btn" href="https://github.com/peter-bachorik" target="_blank" rel="noopener">&#8599; GitHub</a>
-              <!-- TODO: add your LinkedIn link -->
-              <a class="btn" href="#" target="_blank" rel="noopener">&#8599; LinkedIn</a>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <p class="hero-greeting">Hi, I'm</p>
+            <h1 class="hero-name">Lukáš Morvay</h1>
+            <p class="hero-title">IT Developer & BIT Student</p>
+            <p class="hero-description">
+              Building internal web systems and automating workflows. 
+              Passionate about creating efficient digital solutions.
+            </p>
+            <div class="hero-buttons">
+              <a href="#projects" class="btn btn-primary">View Projects</a>
+              <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+            </div>
+            <div class="hero-socials">
+              <a href="https://github.com/lukassmorvay" target="_blank" rel="noopener" class="social-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+              <a href="mailto:morvay04@gmail.com" class="social-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </a>
             </div>
           </div>
+          <div class="hero-image">
+            <div class="image-placeholder">
+                <img src="images/cropped_pic.jpg" alt="Lukáš Morvay" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span></span>
+      </div>
+    </section>
 
-          <div class="photo-wrap reveal">
-            <div class="photo">
-              <!-- TODO: upload a file named profile.jpg to the repo (or change the name below).
-                   Until the photo is there, the initials PB are shown. -->
-              <img src="profile.jpg" alt="Peter Bachorík"
-                   onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-              <div class="fallback" style="display:none;">PB</div>
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              I'm a motivated IT student at the University of Twente, specializing in Business Information Technology. 
+              With hands-on experience in building internal web systems and automating workflows, I'm passionate about 
+              creating efficient digital solutions that make a real impact.
+            </p>
+            <p>
+              Currently based in Enschede, Netherlands, I've worked on various projects ranging from full-stack web 
+              applications to AI-powered tools. I thrive in challenging environments where I can apply my technical 
+              and analytical skills to solve complex problems.
+            </p>
+            <div class="about-info">
+              <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">Enschede, Netherlands</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Education</span>
+                <span class="info-value">BSc Business Information Technology</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">University</span>
+                <span class="info-value">University of Twente</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="wrap reveal">
-        <p class="eyebrow">// about</p>
-        <h2 class="title">About me</h2>
-        <div class="about-text">
-          <p>I'm a computer science student from Slovakia. I'm most drawn to topics where mathematics meets practice — formal languages and automata, algorithms and data structures, operating systems, and cryptography. I enjoy understanding things in depth and writing clean, readable code.</p>
-          <p>Alongside my studies I like building my own projects to put theory into practice. In my free time I enjoy travelling and snorkelling.</p>
-          <!-- TODO: edit this text to suit you -->
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills">
-      <div class="wrap reveal">
-        <p class="eyebrow">// skills</p>
-        <h2 class="title">What I work with</h2>
-        <div class="skills-grid">
-          <div class="skill-card">
-            <h3>Languages</h3>
-            <div class="tags">
-              <span class="tag">C</span>
-              <span class="tag">C++</span>
-              <span class="tag">Python</span>
-              <span class="tag">Java</span>
-              <!-- TODO: edit to suit you -->
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>Theory &amp; concepts</h3>
-            <div class="tags">
-              <span class="tag">Formal languages &amp; automata</span>
-              <span class="tag">Algorithms</span>
-              <span class="tag">Operating systems</span>
-              <span class="tag">Cryptography</span>
-              <span class="tag">Machine learning</span>
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>Tools</h3>
-            <div class="tags">
-              <span class="tag">Git</span>
-              <span class="tag">Linux</span>
-              <span class="tag">GitHub</span>
-              <!-- TODO: edit to suit you -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="wrap reveal">
-        <p class="eyebrow">// projects</p>
-        <h2 class="title">Projects</h2>
-        <div class="projects-grid">
-          <div class="project">
-            <h3>Regex engine</h3>
-            <p>A regular expression engine of my own — converting a regex into an NFA/DFA and evaluating matches. The project connects automata theory with a concrete implementation.</p>
-            <div class="tags">
-              <span class="tag">C++</span>
-              <span class="tag">Automata</span>
-              <span class="tag">Parsing</span>
-            </div>
-            <div class="links">
-              <a href="#" target="_blank" rel="noopener">&#8599; Code</a>
-            </div>
-          </div>
-
-          <!-- TODO: add your school/personal projects (copy a .project block) -->
-          <div class="project">
-            <h3>Project name</h3>
-            <p>A short description — what it solves, what you learned, and the part you find most interesting.</p>
-            <div class="tags">
-              <span class="tag">Tech</span>
-              <span class="tag">Tech</span>
-            </div>
-            <div class="links">
-              <a href="#" target="_blank" rel="noopener">&#8599; Code</a>
-            </div>
-          </div>
-
-          <div class="project">
-            <h3>Project name</h3>
-            <p>A short description — what it solves, what you learned, and the part you find most interesting.</p>
-            <div class="tags">
-              <span class="tag">Tech</span>
-              <span class="tag">Tech</span>
-            </div>
-            <div class="links">
-              <a href="#" target="_blank" rel="noopener">&#8599; Code</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section id="education">
-      <div class="wrap reveal">
-        <p class="eyebrow">// education</p>
-        <h2 class="title">Education</h2>
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+      <div class="container">
+        <h2 class="section-title">Work Experience</h2>
         <div class="timeline">
-          <div class="edu">
-            <!-- TODO: add your university and years -->
-            <p class="when">20XX – present</p>
-            <h3>Bachelor's degree — Computer Science</h3>
-            <p class="org">University name</p>
-            <p class="note">Selected coursework: theory of formal languages and automata, algorithms and data structures, operating systems, cryptography, machine learning.</p>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">June 2025 – September 2025</div>
+              <h3>Part-Time IT Assistant</h3>
+              <h4>Autoglas, s.r.o.</h4>
+              <ul>
+                <li>Built a custom internal scheduling and calendar system using full-stack web development</li>
+                <li>Digitized operational workflows and improved task planning</li>
+                <li>Supported customer communication, inventory tracking, and e-shop operations</li>
+              </ul>
+            </div>
           </div>
-          <div class="edu">
-            <!-- TODO: optional — secondary school -->
-            <p class="when">20XX – 20XX</p>
-            <h3>Secondary school</h3>
-            <p class="org">School name</p>
-            <p class="note">Specialisation / field of study.</p>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">July 2024 – September 2024</div>
+              <h3>Part-Time IT Assistant</h3>
+              <h4>Autoglas, s.r.o.</h4>
+              <ul>
+                <li>Continued development of internal systems</li>
+                <li>Enhanced workflow automation tools</li>
+              </ul>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">June 2023 – September 2023</div>
+              <h3>Part-Time IT Assistant</h3>
+              <h4>Autoglas, s.r.o.</h4>
+              <ul>
+                <li>Initiated development of scheduling system</li>
+                <li>Began digitization of operational processes</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact">
-      <div class="wrap reveal">
-        <p class="eyebrow">// contact</p>
-        <h2 class="title">Get in touch</h2>
-        <p class="lead">Looking for someone for an internship or your team? I'd be glad to talk.</p>
-        <div class="contacts">
-          <a class="btn primary" href="mailto:your@email.com">&#9993; your@email.com</a>
-          <a class="btn" href="https://github.com/peter-bachorik" target="_blank" rel="noopener">&#8599; GitHub</a>
-          <a class="btn" href="#" target="_blank" rel="noopener">&#8599; LinkedIn</a>
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Internal Scheduling System</h3>
+              <span class="project-tag">Full-Stack</span>
+            </div>
+            <p class="project-description">
+              Built a full-stack calendar system to digitize workflows and improve task scheduling 
+              for Autoglas, s.r.o. Implemented with HTML, CSS, JavaScript, and custom backend logic.
+            </p>
+            <div class="project-tech">
+              <span class="tech-badge">HTML</span>
+              <span class="tech-badge">CSS</span>
+              <span class="tech-badge">JavaScript</span>
+              <span class="tech-badge">Backend</span>
+            </div>
+          </div>
+          
+          <div class="project-card">
+            <div class="project-header">
+              <h3>AI Recruitment Tool (Team)</h3>
+              <span class="project-tag">University Project</span>
+            </div>
+            <p class="project-description">
+              Planned a conceptual AI-powered recruitment system with workflow automation and 
+              candidate ranking. Delivered a detailed report as part of a team project.
+            </p>
+            <div class="project-tech">
+              <span class="tech-badge">AI</span>
+              <span class="tech-badge">Automation</span>
+              <span class="tech-badge">Research</span>
+              <span class="tech-badge">Team Project</span>
+            </div>
+          </div>
+          
+          <div class="project-card">
+            <div class="project-header">
+              <h3>University Website Application (Team)</h3>
+              <span class="project-tag">Award Winner</span>
+            </div>
+            <p class="project-description">
+              Developed a web application with interactive features and backend logic. 
+              Awarded certificate for Best Website Application Project.
+            </p>
+            <div class="project-tech">
+              <span class="tech-badge">Web Dev</span>
+              <span class="tech-badge">Backend</span>
+              <span class="tech-badge">Team Project</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-header">
+                <h3>UV-Tracking Smart Bracelet (Team)</h3>
+                <span class="project-tag">Award Winner</span>
+            </div>
+            <p class="project-description">
+                Designed a modular UV-exposure tracking bracelet with a companion app, combining 
+                physical customization, data analytics, and a subscription-based online business model. 
+                Award-winning product design project.
+            </p>
+            <div class="project-tech">
+                <span class="tech-badge">Product Design</span>
+                <span class="tech-badge">IoT</span>
+                <span class="tech-badge">App Design</span>
+                <span class="tech-badge">Business Model</span>
+                <span class="tech-badge">Team Project</span>
+            </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <footer>
-    <div class="wrap">&copy; <span id="year"></span> Peter Bachorík · built by hand in HTML &amp; CSS</div>
-  </footer>
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+      <div class="container">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3>Programming</h3>
+            <div class="skill-items">
+              <div class="skill-item">
+                <span class="skill-name">Python</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Java</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">SQL</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">R</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="40"></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+          <div class="skill-category">
+            <h3>Web Development</h3>
+            <div class="skill-items">
+              <div class="skill-item">
+                <span class="skill-name">HTML/CSS</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="75"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">JavaScript</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">React</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="40"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">REST APIs</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="65"></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    const themeToggle = document.getElementById("theme-toggle");
-    themeToggle.addEventListener("click", () => {
-      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-      if (isDark) {
-        document.documentElement.removeAttribute("data-theme");
-        try { localStorage.setItem("theme", "light"); } catch (e) {}
-      } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-        try { localStorage.setItem("theme", "dark"); } catch (e) {}
-      }
-    });
+          <div class="skill-category">
+            <h3>Tools & Platforms</h3>
+            <div class="skill-items">
+              <div class="skill-item">
+                <span class="skill-name">Git/GitHub</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Tableau</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="60"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Mendix</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Scrum</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Figma</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">ArchiMate</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Odoo</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="70"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Microsoft Office</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="90"></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    const menuBtn = document.querySelector(".menu-btn");
-    const navLinks = document.querySelector(".nav-links");
-    menuBtn.addEventListener("click", () => {
-      const open = navLinks.classList.toggle("open");
-      menuBtn.setAttribute("aria-expanded", open);
-    });
-    navLinks.querySelectorAll("a").forEach(a =>
-      a.addEventListener("click", () => {
-        navLinks.classList.remove("open");
-        menuBtn.setAttribute("aria-expanded", "false");
-      })
-    );
+          <div class="skill-category">
+            <h3>Languages</h3>
+            <div class="skill-items">
+              <div class="skill-item">
+                <span class="skill-name">English (C1)</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="90"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">German (B1)</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="60"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Spanish (B1)</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="60"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Slovak (Native)</span>
+                <div class="skill-bar">
+                  <div class="skill-progress" data-progress="100"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    const progress = document.getElementById("progress");
-    const onScroll = () => {
-      const h = document.documentElement;
-      const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
-      progress.style.width = (scrolled * 100) + "%";
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+          <p class="contact-intro">
+            I'm currently open to new opportunities and collaborations. 
+            Whether you have a question or just want to say hi, feel free to reach out!
+          </p>
+          <div class="contact-methods">
+            <a href="mailto:morvay04@gmail.com" class="contact-card">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <h3>Email</h3>
+              <p>morvay04@gmail.com</p>
+            </a>
+            
+            <a href="tel:+421904155010" class="contact-card">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <h3>Phone</h3>
+              <p>+421 904 155 010</p>
+            </a>
+            
+            <a href="https://github.com/lukassmorvay" target="_blank" rel="noopener" class="contact-card">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <h3>GitHub</h3>
+              <p>github.com/lukassmorvay</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          revealObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 Lukáš Morvay. Built with passion and code.</p>
+      </div>
+    </footer>
 
-    const sections = document.querySelectorAll("section[id]");
-    const links = document.querySelectorAll(".nav-links a");
-    const navObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const id = e.target.getAttribute("id");
-          links.forEach(l =>
-            l.classList.toggle("active", l.getAttribute("href") === "#" + id)
-          );
-        }
-      });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    sections.forEach(s => navObs.observe(s));
-  </script>
-</body>
+    <script src="js/script.js"></script>
+  </body>
 </html>
