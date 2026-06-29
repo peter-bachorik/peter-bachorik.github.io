@@ -29,16 +29,23 @@
     }
 
     :root[data-theme="dark"] {
-      --bg: #0C120F;
-      --surface: #141D18;
-      --ink: #E9EEEA;
-      --text-body: #C2CEC7;
-      --muted: #8B9C92;
-      --accent: #34B473;
-      --accent-deep: #45C683;
-      --accent-soft: #15281D;
-      --line: #233029;
-      --header-bg: rgba(12, 18, 15, 0.82);
+      --bg: #0E2519;
+      --surface: #143C28;
+      --ink: #EAF1EC;
+      --text-body: #C6D6CC;
+      --muted: #94AC9C;
+      --accent: #4ED28A;
+      --accent-deep: #66E0A0;
+      --accent-soft: #1D4A33;
+      --line: #3C6E52;
+      --header-bg: rgba(14, 37, 25, 0.82);
+    }
+
+    :root[data-theme="dark"] body {
+      background:
+        radial-gradient(1100px 620px at 50% -12%, rgba(78, 210, 138, 0.13), transparent 68%),
+        var(--bg);
+      background-attachment: fixed;
     }
 
     body, header, .btn, .skill-card, .project, .tag {
@@ -133,19 +140,23 @@
     .nav-links a.active::after { width: 100%; }
 
     .theme-btn {
-      background: none;
+      position: fixed;
+      bottom: 22px; right: 22px;
+      z-index: 950;
+      background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: 8px;
-      width: 40px; height: 40px;
+      border-radius: 50%;
+      width: 50px; height: 50px;
       cursor: pointer;
       color: var(--ink);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: border-color 0.2s ease;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+      transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
     }
-    .theme-btn:hover { border-color: var(--accent); }
-    .theme-btn svg { width: 18px; height: 18px; }
+    .theme-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .theme-btn svg { width: 20px; height: 20px; }
     :root[data-theme="dark"] .theme-btn .icon-moon { display: none; }
     :root:not([data-theme="dark"]) .theme-btn .icon-sun { display: none; }
 
@@ -459,14 +470,15 @@
           <li><a href="#education">// education</a></li>
           <li><a href="#contact">// contact</a></li>
         </ul>
-        <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
         <button class="menu-btn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
       </div>
     </div>
   </header>
+
+  <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
 
   <main>
     <!-- INTRO -->
