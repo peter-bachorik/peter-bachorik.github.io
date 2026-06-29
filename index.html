@@ -16,14 +16,33 @@
       --bg: #FBFBF8;
       --surface: #FFFFFF;
       --ink: #15201A;
+      --text-body: #324038;
       --muted: #5C6B62;
       --accent: #0E7C46;
       --accent-deep: #0A5A33;
       --accent-soft: #E7F4EC;
       --line: #E8E9E2;
+      --header-bg: rgba(251, 251, 248, 0.82);
       --nav-h: 68px;
       --max: 1080px;
       --r: 14px;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0C120F;
+      --surface: #141D18;
+      --ink: #E9EEEA;
+      --text-body: #C2CEC7;
+      --muted: #8B9C92;
+      --accent: #34B473;
+      --accent-deep: #45C683;
+      --accent-soft: #15281D;
+      --line: #233029;
+      --header-bg: rgba(12, 18, 15, 0.82);
+    }
+
+    body, header, .btn, .skill-card, .project, .tag {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
     * { box-sizing: border-box; }
@@ -63,7 +82,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: var(--nav-h);
-      background: rgba(251, 251, 248, 0.82);
+      background: var(--header-bg);
       backdrop-filter: saturate(180%) blur(12px);
       -webkit-backdrop-filter: saturate(180%) blur(12px);
       border-bottom: 1px solid var(--line);
@@ -112,6 +131,25 @@
     .nav-links a:hover { color: var(--ink); }
     .nav-links a.active { color: var(--accent); }
     .nav-links a.active::after { width: 100%; }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      width: 40px; height: 40px;
+      cursor: pointer;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease;
+    }
+    .theme-btn:hover { border-color: var(--accent); }
+    .theme-btn svg { width: 18px; height: 18px; }
+    :root[data-theme="dark"] .theme-btn .icon-moon { display: none; }
+    :root:not([data-theme="dark"]) .theme-btn .icon-sun { display: none; }
+
+    .nav-right { display: flex; align-items: center; gap: 14px; }
 
     .menu-btn {
       display: none;
@@ -223,7 +261,7 @@
     }
 
     /* ---------- About ---------- */
-    .about-text { max-width: 64ch; font-size: 1.08rem; color: #324038; }
+    .about-text { max-width: 64ch; font-size: 1.08rem; color: var(--text-body); }
     .about-text p { margin: 0 0 18px; }
 
     /* ---------- Skills ---------- */
@@ -395,6 +433,16 @@
       .btn:hover, .project:hover { transform: none; }
     }
   </style>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var dark = saved ? saved === "dark"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (dark) document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div id="progress"></div>
@@ -402,15 +450,21 @@
   <header>
     <div class="nav-inner">
       <a href="#intro" class="brand">peter<span>.</span>bachorik</a>
-      <button class="menu-btn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
-      <ul class="nav-links">
-        <li><a href="#intro">// intro</a></li>
-        <li><a href="#about">// about</a></li>
-        <li><a href="#skills">// skills</a></li>
-        <li><a href="#projects">// projects</a></li>
-        <li><a href="#education">// education</a></li>
-        <li><a href="#contact">// contact</a></li>
-      </ul>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#intro">// intro</a></li>
+          <li><a href="#about">// about</a></li>
+          <li><a href="#skills">// skills</a></li>
+          <li><a href="#projects">// projects</a></li>
+          <li><a href="#education">// education</a></li>
+          <li><a href="#contact">// contact</a></li>
+        </ul>
+        <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="menu-btn" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+      </div>
     </div>
   </header>
 
@@ -590,6 +644,18 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    const themeToggle = document.getElementById("theme-toggle");
+    themeToggle.addEventListener("click", () => {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (isDark) {
+        document.documentElement.removeAttribute("data-theme");
+        try { localStorage.setItem("theme", "light"); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        try { localStorage.setItem("theme", "dark"); } catch (e) {}
+      }
+    });
 
     const menuBtn = document.querySelector(".menu-btn");
     const navLinks = document.querySelector(".nav-links");
