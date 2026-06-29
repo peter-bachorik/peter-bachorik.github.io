@@ -212,7 +212,7 @@ cursorStyle.textContent = `
   .custom-cursor {
     width: 20px;
     height: 20px;
-    border: 2px solid #6366f1;
+    border: 2px solid #16a34a;
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -266,12 +266,12 @@ const interactiveElements = document.querySelectorAll('a, button, .project-card,
 interactiveElements.forEach(el => {
   el.addEventListener('mouseenter', () => {
     cursor.style.transform = 'scale(1.5)';
-    cursor.style.borderColor = '#ec4899';
+    cursor.style.borderColor = '#16a34a';
   });
   
   el.addEventListener('mouseleave', () => {
     cursor.style.transform = 'scale(1)';
-    cursor.style.borderColor = '#6366f1';
+    cursor.style.borderColor = '#14b8a6';
   });
 });
 
@@ -329,7 +329,7 @@ particleStyle.textContent = `
     position: absolute;
     width: 3px;
     height: 3px;
-    background: rgba(99, 102, 241, 0.5);
+    background: rgba(22, 163, 74, 0.5);
     border-radius: 50%;
     animation: float-particle linear infinite;
     pointer-events: none;
@@ -377,7 +377,7 @@ progressStyle.textContent = `
     top: 0;
     left: 0;
     height: 3px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(90deg, #16a34a 0%, #065f46 100%);
     z-index: 9999;
     transition: width 0.1s ease-out;
   }
